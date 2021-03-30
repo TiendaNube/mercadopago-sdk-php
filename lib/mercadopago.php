@@ -453,6 +453,10 @@ class MPRestClient {
 
         array_push($headers, "x-product-id: BC32A7VTRPP001U8NHK0");
 
+        if (isset($request['params']['access_token'])) {
+            $headers[] = 'Authorization: Bearer ' . $request['params']['access_token'];
+        }
+
         // Build $connect
         $connect = curl_init();
 
