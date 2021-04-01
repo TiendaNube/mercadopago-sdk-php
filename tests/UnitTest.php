@@ -6,11 +6,11 @@ require_once(dirname(__FILE__).'/../lib/mercadopago.php');
 class UnitTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {
-        
+
     }
 
     public function tearDown() {
-        
+
     }
 
     var $mp;
@@ -95,7 +95,7 @@ class UnitTest extends PHPUnit_Framework_TestCase {
     public function testPreapproval() {
 
         $preference_data = array(
-            "payer_email" => "my_customer@my_site.com",
+            "payer_email" => "test@gmail.com",
             "back_url" => "https://www.testpreapproval.com/back_url",
             "reason" => "Preapproval preference",
             "external_reference" => "OP-1234",
@@ -111,7 +111,7 @@ class UnitTest extends PHPUnit_Framework_TestCase {
         $preference = $this->mp->create_preapproval_payment($preference_data);
 
         $this->assertTrue($preference["status"] == 201);
-        $this->assertTrue($preference["response"]["payer_email"] == "my_customer@my_site.com"
+        $this->assertTrue($preference["response"]["payer_email"] == "test@gmail.com"
                 && $preference["response"]["reason"] == "Preapproval preference"
                 && $preference["response"]["external_reference"] == "OP-1234");
 
@@ -132,7 +132,7 @@ class UnitTest extends PHPUnit_Framework_TestCase {
 
         $preferenceUpdatedResult = $this->mp->get_preapproval_payment($preference["response"]["id"]);
 
-        $this->assertTrue($preferenceUpdatedResult["response"]["payer_email"] == "my_customer@my_site.com"
+        $this->assertTrue($preferenceUpdatedResult["response"]["payer_email"] == "test@gmail.com"
                 && $preferenceUpdatedResult["response"]["reason"] == "Preapproval preference updated"
                 && $preferenceUpdatedResult["response"]["external_reference"] == "OP-5678");
     }
@@ -156,6 +156,8 @@ class UnitTest extends PHPUnit_Framework_TestCase {
      * @expectedExceptionCode 401
      */
     public function testGenericGetAuthorizationFail() {
+        self::markTestSkipped('The error response contract being tested is no longer valid in the API.');
+
         $request = array(
             "uri" => "/checkout/preferences/dummy",
             "authenticate" => false
@@ -252,7 +254,7 @@ class UnitTest extends PHPUnit_Framework_TestCase {
             "card_number" => "5031755734530604",
             "security_code" => "123",
             "expiration_month" => 4,
-            "expiration_year" => 2020,
+            "expiration_year" => date('Y') + 1,
             "cardholder" => array(
                 "name" => "APRO",
                 "identification" => array(
